@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="404.0" prefWidth="831.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.task.control.MainControl">
+   <children>
+      <Pane layoutX="448.0" layoutY="79.0" prefHeight="320.0" prefWidth="372.0" style="-fx-background-color: #ebebeb;">
+         <children>
+            <Label layoutX="186.0" layoutY="110.0" text="Completed:" underline="true" />
+            <Label layoutX="231.0" layoutY="69.0" text="Due:" underline="true" />
+            <Text fx:id="startDetail" layoutX="102.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="N/A" />
+            <Text fx:id="dueDateDetail" layoutX="102.0" layoutY="126.0" strokeType="OUTSIDE" strokeWidth="0.0" text="N/A" />
+            <Text fx:id="dueDetail" layoutX="276.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="N/A" />
+            <Text fx:id="completedDetail" layoutX="276.0" layoutY="126.0" strokeType="OUTSIDE" strokeWidth="0.0" text="N/A" />
+            <Text fx:id="titleDetail" layoutX="102.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="N/A" />
+            <Label layoutX="19.0" layoutY="110.0" text="Due Date:" underline="true" />
+            <Label layoutX="14.0" layoutY="69.0" text="Start Date: " />
+            <Label layoutX="52.0" layoutY="30.0" text="Title:" underline="true" />
+         </children>
+      </Pane>
+      <ScrollPane layoutY="78.0" prefHeight="326.0" prefWidth="435.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="396.0" AnchorPane.topAnchor="78.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="330.0" prefWidth="417.0">
+               <children>
+                  <ListView fx:id="listBox" onMouseClicked="#displayDetails" prefHeight="330.0" prefWidth="416.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
+                     <contextMenu>
+                        <ContextMenu>
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#markComplete" text="Mark Completed" />
+                              <MenuItem mnemonicParsing="false" onAction="#markUncomplete" text="Mark Uncompleted" />
+                              <MenuItem mnemonicParsing="false" onAction="#removeAppointment" text="Remove Appointment" />
+                          </items>
+                        </ContextMenu>
+                     </contextMenu></ListView>
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+      <Pane prefHeight="46.0" prefWidth="831.0" style="-fx-background-color: #4169e1; -fx-border-color: black; -fx-border-width: 0 0 5 0;">
+         <children>
+            <ChoiceBox fx:id="choiceBox" layoutX="446.0" layoutY="5.0" prefHeight="31.0" prefWidth="127.0" />
+            <Button layoutX="586.0" layoutY="5.0" mnemonicParsing="false" onAction="#showAppointments" text="Refresh" />
+            <Button layoutX="671.0" layoutY="5.0" mnemonicParsing="false" onAction="#addAppointment" text="Add Appointment" />
+            <DatePicker fx:id="mainDatePicker" layoutX="266.0" layoutY="5.0" prefHeight="31.0" prefWidth="158.0" />
+         </children>
+      </Pane>
+      <Label layoutX="7.0" text="Profile:">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="profileName" layoutX="62.0" text="user">
+         <font>
+            <Font name="System Italic" size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="6.0" layoutY="21.0" text="Todays Date: ">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="currentDate" layoutX="101.0" layoutY="21.0" text="MM/dd/yyyy" />
+      <Text layoutX="21.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start Date" underline="true" />
+      <Text layoutX="113.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Due Date" underline="true" />
+      <Text layoutX="230.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title" underline="true" />
+      <Text layoutX="592.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Details" underline="true" />
+      <Label layoutX="586.0" layoutY="171.0" />
+      <Label layoutX="454.0" layoutY="241.0" text="Comment:" underline="true" />
+      <TextArea fx:id="commentDetail" editable="false" layoutX="451.0" layoutY="263.0" prefHeight="119.0" prefWidth="366.0" wrapText="true" />
+   </children>
+</AnchorPane>

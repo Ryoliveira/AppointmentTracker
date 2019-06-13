@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="306.0" prefWidth="327.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.task.control.LogInController">
+   <children>
+      <Pane prefHeight="306.0" prefWidth="327.0">
+         <children>
+            <PasswordField fx:id="newPassword" layoutX="143.0" layoutY="137.0" prefHeight="31.0" prefWidth="149.0" />
+            <Text layoutX="95.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New Profile" wrappingWidth="136.22314453125">
+               <font>
+                  <Font size="26.0" />
+               </font>
+            </Text>
+            <Text layoutX="56.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="User Name :" />
+            <TextField fx:id="newUsername" layoutX="143.0" layoutY="84.0" prefHeight="31.0" prefWidth="149.0" />
+            <Text layoutX="66.0" layoutY="159.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password : " />
+            <Text layoutX="18.0" layoutY="211.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Repeat Password : " />
+            <Button layoutX="74.0" layoutY="246.0" mnemonicParsing="false" onAction="#createNewProfile" text="Create" />
+            <Button fx:id="cancel" layoutX="199.0" layoutY="246.0" mnemonicParsing="false" onAction="#closeWindow" text="Cancel" />
+            <PasswordField fx:id="matchPassword" layoutX="143.0" layoutY="190.0" prefHeight="31.0" prefWidth="149.0" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
