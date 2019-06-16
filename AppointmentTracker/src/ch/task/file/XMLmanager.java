@@ -20,7 +20,14 @@ public class XMLmanager {
 
 	final private static String FILE_NAME = "./src/ch/task/file/userProfiles.xml";
 
-	public static void writeXML(String username, String password) throws JDOMException, IOException {
+	/*
+	 * Writes new profile to XML file with hashed password
+	 * 
+	 * @param username profile username
+	 * 
+	 * @param password profile password
+	 */
+	public static void write(String username, String password) throws JDOMException, IOException {
 		Document document = null;
 		Element root = null;
 		File xmlFile = new File(FILE_NAME);
@@ -55,6 +62,11 @@ public class XMLmanager {
 
 	}
 
+	/*
+	 * Gets list of users in XML file
+	 * 
+	 * @return list of user elements
+	 */
 	public static List<Element> getUsernames() throws JDOMException, IOException {
 		File file = new File(FILE_NAME);
 		List<Element> users = new ArrayList<>();
@@ -67,6 +79,11 @@ public class XMLmanager {
 		return users;
 	}
 
+	/*
+	 * Validates profile name/password for match
+	 * 
+	 * @return if profile credentials match
+	 */
 	public static boolean secureLogIn(String profile, String password) {
 		if (profile.isEmpty() || password.isEmpty()) {
 			return false;
@@ -91,6 +108,11 @@ public class XMLmanager {
 		return false;
 	}
 
+	/*
+	 * Check to see if profile name already exists
+	 * 
+	 * @return if profile exists
+	 */
 	public static boolean checkForProfile(String profile) {
 		File xmlFile = new File(FILE_NAME);
 		if (xmlFile.exists()) {

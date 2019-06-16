@@ -40,6 +40,9 @@ public class LogInController {
 	@FXML
 	private PasswordField matchPassword;
 
+	/*
+	 * Validates and creates new profile for user
+	 */
 	@FXML
 	void createNewProfile(ActionEvent event) throws JDOMException, IOException {
 		String username = newUsername.getText();
@@ -65,7 +68,7 @@ public class LogInController {
 			MainControl.alertBox(AlertType.ERROR, "Username taken", null, "Username already in use!");
 			newUsername.clear();
 		} else {
-			XMLmanager.writeXML(username, password);
+			XMLmanager.write(username, password);
 			MainControl.alertBox(AlertType.INFORMATION, "Profile Creation", null, "Profile has been created!");
 			closeWindow(event);
 		}
@@ -74,6 +77,9 @@ public class LogInController {
 
 	}
 
+	/*
+	 * Checks for profile based on user provided username and password
+	 */
 	@FXML
 	void AttemptLogIn(ActionEvent event) throws IOException {
 		String profile = userLogIn.getText();
@@ -90,6 +96,9 @@ public class LogInController {
 
 	}
 
+	/*
+	 * Closes current window
+	 */
 	@FXML
 	void closeWindow(ActionEvent event) {
 		Button btn = (Button) event.getSource();
@@ -97,6 +106,9 @@ public class LogInController {
 		window.close();
 	}
 
+	/*
+	 * opens registration window to create new profile for user
+	 */
 	@FXML
 	void openRegWin(ActionEvent event) {
 		try {
@@ -113,6 +125,11 @@ public class LogInController {
 	}	
 
 
+	/*
+	 * validates text to match pattern
+	 * 
+	 * @return if text is valid
+	 */
 	public boolean validate(String text, String pattern) {
 		Pattern pat = Pattern.compile(pattern);
 		Matcher match = pat.matcher(text);
@@ -123,6 +140,10 @@ public class LogInController {
 		}
 	}
 	
+	
+	/*
+	 * launch home page for application
+	 */
 	public void launchHomePage(String profile) throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/Main.fxml"));
 		AnchorPane layout = loader.load();

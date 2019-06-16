@@ -17,11 +17,11 @@
       <TextField fx:id="title" layoutX="188.0" layoutY="74.0" />
       <Text layoutX="98.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Due Date: " />
       <Text layoutX="96.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start Date: " />
-      <DatePicker fx:id="dueDate" layoutX="188.0" layoutY="160.0" prefHeight="31.0" prefWidth="187.0" />
       <DatePicker fx:id="startDate" layoutX="188.0" layoutY="118.0" prefHeight="31.0" prefWidth="187.0" />
+      <DatePicker fx:id="dueDate" layoutX="188.0" layoutY="160.0" prefHeight="31.0" prefWidth="187.0" />
       <TextArea fx:id="comment" layoutX="20.0" layoutY="259.0" prefHeight="152.0" prefWidth="401.0" promptText="Any comments to add..." wrapText="true" />
       <Text layoutX="21.0" layoutY="248.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Comments" underline="true" />
-      <Button layoutX="282.0" layoutY="426.0" mnemonicParsing="false" onAction="#confirmAppointment" prefHeight="31.0" prefWidth="64.0" text="Add" />
+      <Button defaultButton="true" layoutX="282.0" layoutY="426.0" mnemonicParsing="false" onAction="#confirmAppointment" prefHeight="31.0" prefWidth="64.0" text="Add" />
       <Button layoutX="360.0" layoutY="426.0" mnemonicParsing="false" onAction="#closeWindow" text="Cancel" />
    </children>
 </AnchorPane>

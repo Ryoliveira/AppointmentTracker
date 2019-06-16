@@ -24,9 +24,9 @@
                </font>
             </Text>
             <PasswordField fx:id="userPassword" layoutX="86.0" layoutY="148.0" />
+            <Button defaultButton="true" layoutX="102.0" layoutY="195.0" mnemonicParsing="false" onAction="#AttemptLogIn" text="Login" />
+            <Button fx:id="register" layoutX="180.0" layoutY="195.0" mnemonicParsing="false" onAction="#openRegWin" text="Register" />
          </children>
       </Pane>
-      <Button fx:id="register" layoutX="184.0" layoutY="196.0" mnemonicParsing="false" onAction="#openRegWin" text="Register" />
-      <Button layoutX="100.0" layoutY="196.0" mnemonicParsing="false" onAction="#AttemptLogIn" text="Login" />
    </children>
 </AnchorPane>

@@ -9,13 +9,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ch.task.user.UserProfile;
 
-public class JSONmanager {
+public class UserJsonRepository implements UserRepository {
 
 	final private static String FILE_NAME = "./src/ch/task/file/appointmentLists.json";
 
 	private static ObjectMapper mapper = new ObjectMapper();
 
-	public static void writeToFile(UserProfile profile) {
+	/*
+	 * sorts user appointments and writes them to JSON file
+	 * 
+	 * @param profile User profile to be saved
+	 */
+	@Override
+	public void save(UserProfile profile) {
 		File file = new File(FILE_NAME);
 		boolean foundProfile = false;
 		ArrayList<UserProfile> profiles = new ArrayList<>();
@@ -40,7 +46,13 @@ public class JSONmanager {
 		}
 	}
 
-	public static UserProfile loadProfile(String profileName) {
+	/*
+	 * Return requested user profile if it exists
+	 * 
+	 * @return profile if it exists, otherwise a new profile will be returned
+	 */
+	@Override
+	public UserProfile load(String profileName) {
 		UserProfile profile = new UserProfile(profileName);
 		File file = new File(FILE_NAME);
 		if (file.exists()) {

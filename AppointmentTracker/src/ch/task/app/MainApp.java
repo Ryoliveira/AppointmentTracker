@@ -1,5 +1,5 @@
 package ch.task.app;
-	
+
 import java.io.IOException;
 
 import javafx.application.Application;
@@ -20,12 +20,11 @@ public class MainApp extends Application {
 		initRootLayout();
 	}
 
-	/**
+	/*
 	 * Initializes the root layout.
 	 */
 	public void initRootLayout() {
 		try {
-			// Load root layout from fxml file.
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(MainApp.class.getResource("../view/LogIn.fxml"));
 			rootLayout = loader.load();
@@ -36,7 +35,6 @@ public class MainApp extends Application {
 			primaryStage.show();
 			primaryStage.setResizable(false);
 			primaryStage.sizeToScene();
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

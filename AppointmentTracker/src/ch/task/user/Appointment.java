@@ -33,11 +33,10 @@ public class Appointment implements Comparable<Appointment> {
 	public String getStartDate() {
 		return startDate;
 	}
-	
+
 	/*
 	 * @param startDate starting date of appointment
 	 */
-
 	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
@@ -56,7 +55,9 @@ public class Appointment implements Comparable<Appointment> {
 		this.dueDate = dueDate;
 	}
 
-	
+	/*
+	 * @return title of appointment
+	 */
 	public String getTitle() {
 		return title;
 	}
@@ -68,6 +69,9 @@ public class Appointment implements Comparable<Appointment> {
 		this.title = title;
 	}
 
+	/*
+	 * @return appointment comment
+	 */
 	public String getComment() {
 		return comment;
 	}
@@ -79,6 +83,9 @@ public class Appointment implements Comparable<Appointment> {
 		this.comment = desc;
 	}
 
+	/*
+	 * @return if appointment is completed
+	 */
 	public boolean isCompleted() {
 		return completed;
 	}
@@ -90,40 +97,51 @@ public class Appointment implements Comparable<Appointment> {
 		this.completed = completed;
 	}
 
+	/*
+	 * @return if appointment is due today
+	 */
 	public boolean isDueToday() {
 		return due;
 	}
-	
+
 	/*
 	 * @param startDate starting date of appointment
 	 */
 	public void setDueToday(boolean dueToday) {
 		this.due = dueToday;
 	}
-	
-	
+
+	/*
+	 * Check to see if appointment due date has arrived/passed
+	 * 
+	 * @return if due date has arrived/passed
+	 */
 	public boolean checkIfDue() {
 		LocalDate today = LocalDate.now();
 		LocalDate dueDate = LocalDate.parse(this.dueDate);
 		boolean due = today.plusDays(1).isAfter(dueDate) ? true : false;
-		if(due) {
+		if (due) {
 			this.due = true;
 		}
 		return due;
 	}
-	
-	public String detailedView() {
-		String format = "Start Date: " + startDate + "\nDue Date: " + dueDate + "\nTitle: " + title + "\nCompleted: " + completed + 
-				"\nDue Today: " + due + "\nComment: " + comment;
-		return format;
-	}
-	
+
+	/*
+	 * Formats date to MM/dd/yyyy
+	 * 
+	 * @param date date string to be formatted
+	 */
 	public String reformatDate(String date) {
 		DateTimeFormatter f = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 		String formattedDate = LocalDate.parse(date).format(f);
 		return formattedDate;
 	}
 
+	/*
+	 * returned formatted start/due date and title of appointment
+	 * 
+	 * @return formatted string
+	 */
 	@Override
 	public String toString() {
 		String startReformat = reformatDate(startDate);
@@ -131,11 +149,16 @@ public class Appointment implements Comparable<Appointment> {
 		String format = String.format("%-15s %-15s %s", startReformat, dueReformat, title);
 		return format;
 	}
-	
+
+	/*
+	 * compares two appointment objects by due date
+	 * 
+	 * @param otherApp appointment object to be compared to
+	 */
 	@Override
-	public int compareTo(Appointment o) {
+	public int compareTo(Appointment otherApp) {
 		LocalDate dueDate = LocalDate.parse(this.dueDate, DateTimeFormatter.ISO_DATE);
-		LocalDate otherDueDate = LocalDate.parse(o.getDueDate(), DateTimeFormatter.ISO_DATE);
+		LocalDate otherDueDate = LocalDate.parse(otherApp.getDueDate(), DateTimeFormatter.ISO_DATE);
 		return dueDate.compareTo(otherDueDate);
 	}
 

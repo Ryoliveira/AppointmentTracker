@@ -2,7 +2,8 @@ package ch.task.control;
 
 import java.time.format.DateTimeFormatter;
 
-import ch.task.file.JSONmanager;
+import ch.task.file.UserJsonRepository;
+import ch.task.file.UserRepository;
 import ch.task.user.Appointment;
 import ch.task.user.UserProfile;
 import ch.task.control.MainControl;
@@ -26,44 +27,52 @@ public class AppointmentControl {
 	private TextField title;
 
 	private String profileName;
+	private UserRepository JM = new UserJsonRepository();
 
 	void initialize() {
 	}
 
+	/*
+	 * sets profile name
+	 */
 	void initData(String profileN) {
 		profileName = profileN;
 	}
 
+	/*
+	 * Creates new user appointment
+	 */
 	@FXML
 	void confirmAppointment(ActionEvent btn) {
-		UserProfile profile = JSONmanager.loadProfile(profileName);
+		UserProfile profile = JM.load(profileName);
 		try {
 			DateTimeFormatter pattern = DateTimeFormatter.ISO_DATE;
 			String newStart = startDate.getValue().format(pattern);
 			String newDueDate = dueDate.getValue().format(pattern);
 			String newTitle = title.getText();
 			String newComment = comment.getText();
-		if (newTitle.isEmpty()) {
-			MainControl.alertBox(AlertType.ERROR, "Blank Title", null, "Please enter a valid title");
-		} else {
-			Appointment newApp = new Appointment(newStart, newDueDate, newTitle, newComment, false, false);
-			profile.addAppointment(newApp);
-			JSONmanager.writeToFile(profile);
-			MainControl.alertBox(AlertType.INFORMATION, "Success", null, "Appointment added succussfully");
-			closeWindow(btn);
-		}
-		}catch(NullPointerException e) {
-			System.out.println(e);
+			if (newTitle.isEmpty()) {
+				MainControl.alertBox(AlertType.ERROR, "Blank Title", null, "Please enter a valid title");
+			} else {
+				Appointment newApp = new Appointment(newStart, newDueDate, newTitle, newComment, false, false);
+				profile.addAppointment(newApp);
+				JM.save(profile);
+				MainControl.alertBox(AlertType.INFORMATION, "Success", null, "Appointment added succussfully");
+				closeWindow(btn);
+			}
+		} catch (NullPointerException e) {
 			MainControl.alertBox(AlertType.ERROR, "Invalid Date", null, "Please enter a valid Date");
 		}
 	}
 
+	/*
+	 * Closes current window
+	 */
 	@FXML
 	void closeWindow(ActionEvent event) {
 		Button btn = (Button) event.getSource();
 		Stage window = (Stage) btn.getScene().getWindow();
 		window.close();
 	}
-
 
 }
