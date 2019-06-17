@@ -31,8 +31,8 @@
                      <contextMenu>
                         <ContextMenu>
                           <items>
-                            <MenuItem mnemonicParsing="false" onAction="#markComplete" text="Mark Completed" />
-                              <MenuItem mnemonicParsing="false" onAction="#markUncomplete" text="Mark Uncompleted" />
+                            <MenuItem mnemonicParsing="false" onAction="#markProgress" text="Mark Completed" />
+                              <MenuItem mnemonicParsing="false" onAction="#markProgress" text="Mark Uncompleted" />
                               <MenuItem mnemonicParsing="false" onAction="#removeAppointment" text="Remove Appointment" />
                           </items>
                         </ContextMenu>

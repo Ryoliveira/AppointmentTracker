@@ -16,9 +16,9 @@ import org.jdom2.output.XMLOutputter;
 
 import BCrypt.*;
 
-public class XMLmanager {
+public class UserXmlRepository implements UserRepository{
 
-	final private static String FILE_NAME = "./src/ch/task/file/userProfiles.xml";
+	final private static String FILE_NAME = "./userProfiles.xml";
 
 	/*
 	 * Writes new profile to XML file with hashed password
@@ -27,18 +27,22 @@ public class XMLmanager {
 	 * 
 	 * @param password profile password
 	 */
-	public static void write(String username, String password) throws JDOMException, IOException {
+	public void writeToFile(String username, String password) {
 		Document document = null;
 		Element root = null;
 		File xmlFile = new File(FILE_NAME);
 
 		// If file exists, build file. Otherwise create new file
 		if (xmlFile.exists()) {
+			try {
 			FileInputStream fis = new FileInputStream(xmlFile);
 			SAXBuilder builder = new SAXBuilder();
 			document = builder.build(fis);
 			root = document.getRootElement();
 			fis.close();
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
 		} else {
 			document = new Document();
 			root = new Element("profiles");
@@ -58,7 +62,11 @@ public class XMLmanager {
 
 		// Write File
 		XMLOutputter xmlOutput = new XMLOutputter(Format.getPrettyFormat());
-		xmlOutput.output(document, new FileOutputStream(xmlFile));
+		try {
+			xmlOutput.output(document, new FileOutputStream(xmlFile));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -84,7 +92,7 @@ public class XMLmanager {
 	 * 
 	 * @return if profile credentials match
 	 */
-	public static boolean secureLogIn(String profile, String password) {
+	public boolean validateLogIn(String profile, String password) {
 		if (profile.isEmpty() || password.isEmpty()) {
 			return false;
 		}
@@ -113,7 +121,7 @@ public class XMLmanager {
 	 * 
 	 * @return if profile exists
 	 */
-	public static boolean checkForProfile(String profile) {
+	public boolean checkForProfile(String profileName) {
 		File xmlFile = new File(FILE_NAME);
 		if (xmlFile.exists()) {
 
@@ -122,8 +130,8 @@ public class XMLmanager {
 				// Search for profile name
 				for (int i = 0; i < users.size(); i++) {
 					Element currentUser = users.get(i);
-					String profileName = currentUser.getAttributeValue("username");
-					if (profileName.equals(profile)) {
+					String username = currentUser.getAttributeValue("username");
+					if (username.equals(profileName)) {
 						return true;
 					}
 				}

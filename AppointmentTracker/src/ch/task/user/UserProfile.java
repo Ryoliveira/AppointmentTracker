@@ -1,7 +1,5 @@
 package ch.task.user;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -78,23 +76,4 @@ public class UserProfile {
 	public void sortAppointments() {
 		Collections.sort(appointments);
 	}
-
-	/*
-	 * Removes all appointments that have been due for over 30 days
-	 */
-	public void removeExpired() {
-		for (int i = 0; i < appointments.size(); i++) {
-			Appointment app = appointments.get(i);
-			LocalDate due = LocalDate.parse(app.getDueDate());
-			LocalDate today = LocalDate.now();
-			int daysBetween = (int) ChronoUnit.DAYS.between(due, today);
-			if (daysBetween > 30) {
-				deleteAppointment(app);
-				System.out.println("Removed!");
-				System.out.println(app.toString());
-			}
-
-		}
-	}
-
 }

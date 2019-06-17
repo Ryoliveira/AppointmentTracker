@@ -10,7 +10,8 @@ import java.util.regex.Pattern;
 import org.jdom2.JDOMException;
 
 import ch.task.app.MainApp;
-import ch.task.file.XMLmanager;
+import ch.task.file.UserRepository;
+import ch.task.file.UserXmlRepository;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,9 +23,9 @@ import javafx.stage.Stage;
 
 public class LogInController {
 	// Username/Password validation requirements
-	// Password must be between 8 and 16 digits and include at least one number.
-	final String USERNAME_PAT = "^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$";
 	// Username must be between 8 and 16 characters
+	final String USERNAME_PAT = "^(?=.{8,20}$)[a-zA-Z0-9._]+$";
+	// Password must be between 8 and 16 digits and include at least one digit.
 	final String PASSWORD_PAT = "^(?=.*\\d).{8,16}$";
 	// Main log in fields
 	@FXML
@@ -40,6 +41,8 @@ public class LogInController {
 	@FXML
 	private PasswordField matchPassword;
 
+	private UserRepository userRepo = new UserXmlRepository();
+
 	/*
 	 * Validates and creates new profile for user
 	 */
@@ -51,24 +54,25 @@ public class LogInController {
 		// Check for a none blank unique username
 		boolean isValidUserName = validate(username, USERNAME_PAT);
 		boolean validPass = validate(password, PASSWORD_PAT);
-		boolean isUniqueName = !XMLmanager.checkForProfile(username);
+		boolean isUniqueName = !userRepo.checkForProfile(username);
 		boolean notBlank = !password.isEmpty();
 		// check if password was entered correctly in both fields
 		boolean isMatch = password.equals(checkMatchPass);
 		if (!isValidUserName) {
-			MainControl.alertBox(AlertType.ERROR, "Invalid Username", null, "Username must be between 8 and 16 characters");
+			MainControl.alertBox(AlertType.ERROR, "Invalid Username", null,
+					"Username must be between 8 and 16 characters");
 		} else if (!notBlank) {
 			MainControl.alertBox(AlertType.ERROR, "Empty password", null, "Password cannot be blank!");
 		} else if (!validPass) {
 			MainControl.alertBox(AlertType.ERROR, "Invalid Password", null,
-					"Password must be between 8 and 16 digits and include at least one number.");
+					"Password must be between 8 and 16 characters and include one digit.");
 		} else if (!isMatch) {
 			MainControl.alertBox(AlertType.ERROR, "Password mismatch", null, "Repeated password does not match!");
 		} else if (!isUniqueName) {
 			MainControl.alertBox(AlertType.ERROR, "Username taken", null, "Username already in use!");
 			newUsername.clear();
 		} else {
-			XMLmanager.write(username, password);
+			userRepo.writeToFile(username, password);
 			MainControl.alertBox(AlertType.INFORMATION, "Profile Creation", null, "Profile has been created!");
 			closeWindow(event);
 		}
@@ -84,7 +88,7 @@ public class LogInController {
 	void AttemptLogIn(ActionEvent event) throws IOException {
 		String profile = userLogIn.getText();
 		String password = userPassword.getText();
-		boolean valid = XMLmanager.secureLogIn(profile, password);
+		boolean valid = userRepo.validateLogIn(profile, password);
 		if (valid) {
 			launchHomePage(profile);
 			closeWindow(event);
@@ -122,8 +126,7 @@ public class LogInController {
 			e.printStackTrace();
 		}
 
-	}	
-
+	}
 
 	/*
 	 * validates text to match pattern
@@ -139,8 +142,7 @@ public class LogInController {
 			return false;
 		}
 	}
-	
-	
+
 	/*
 	 * launch home page for application
 	 */
@@ -154,7 +156,7 @@ public class LogInController {
 		stage.show();
 		stage.setResizable(false);
 		stage.sizeToScene();
-		
+
 		MainControl controller = loader.<MainControl>getController();
 		controller.initData(profile);
 	}

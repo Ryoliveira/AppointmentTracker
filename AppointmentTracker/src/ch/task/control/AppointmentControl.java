@@ -1,9 +1,11 @@
 package ch.task.control;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
-import ch.task.file.UserJsonRepository;
-import ch.task.file.UserRepository;
+import ch.task.file.AppointmentJsonRepository;
+import ch.task.file.AppointmentRepository;
 import ch.task.user.Appointment;
 import ch.task.user.UserProfile;
 import ch.task.control.MainControl;
@@ -27,7 +29,7 @@ public class AppointmentControl {
 	private TextField title;
 
 	private String profileName;
-	private UserRepository JM = new UserJsonRepository();
+	private AppointmentRepository JM = new AppointmentJsonRepository();
 
 	void initialize() {
 	}
@@ -45,24 +47,40 @@ public class AppointmentControl {
 	@FXML
 	void confirmAppointment(ActionEvent btn) {
 		UserProfile profile = JM.load(profileName);
+		DateTimeFormatter pattern = DateTimeFormatter.ISO_DATE;
 		try {
-			DateTimeFormatter pattern = DateTimeFormatter.ISO_DATE;
-			String newStart = startDate.getValue().format(pattern);
-			String newDueDate = dueDate.getValue().format(pattern);
-			String newTitle = title.getText();
-			String newComment = comment.getText();
-			if (newTitle.isEmpty()) {
-				MainControl.alertBox(AlertType.ERROR, "Blank Title", null, "Please enter a valid title");
+			if (isValidDueDate()) {
+				String newStart = startDate.getValue().format(pattern);
+				String newDueDate = dueDate.getValue().format(pattern);
+				String newTitle = title.getText();
+				String newComment = comment.getText();
+				if (newTitle.isEmpty()) {
+					MainControl.alertBox(AlertType.ERROR, "Blank Title", null, "Please enter a valid title");
+				} else {
+					Appointment newApp = new Appointment(newStart, newDueDate, newTitle, newComment, false, false);
+					profile.addAppointment(newApp);
+					JM.save(profile);
+					MainControl.alertBox(AlertType.INFORMATION, "Success", null, "Appointment added succussfully");
+					closeWindow(btn);
+				}
 			} else {
-				Appointment newApp = new Appointment(newStart, newDueDate, newTitle, newComment, false, false);
-				profile.addAppointment(newApp);
-				JM.save(profile);
-				MainControl.alertBox(AlertType.INFORMATION, "Success", null, "Appointment added succussfully");
-				closeWindow(btn);
+				MainControl.alertBox(AlertType.ERROR, "Invalid date", null, "Due date must be within 60 days after todays date and after start date.");
 			}
 		} catch (NullPointerException e) {
 			MainControl.alertBox(AlertType.ERROR, "Invalid Date", null, "Please enter a valid Date");
 		}
+	}
+
+	/*
+	 * Appointments due dates must be within 30 days
+	 * 
+	 * @return if due date is within 30 days
+	 */
+	public boolean isValidDueDate() {
+		LocalDate now = LocalDate.now();
+		int daysBetween = (int) ChronoUnit.DAYS.between(now, dueDate.getValue());
+		System.out.println(daysBetween);
+		return daysBetween > 0 && daysBetween <= 60 && startDate.getValue().isBefore(dueDate.getValue());
 	}
 
 	/*

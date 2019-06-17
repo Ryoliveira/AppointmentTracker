@@ -1,9 +1,9 @@
 package ch.task.file;
 
-import ch.task.user.UserProfile;
-
 public interface UserRepository {
-
-	void save(UserProfile profile);
-	UserProfile load(String profileName);
+	void writeToFile(String username, String password);
+	
+	boolean checkForProfile(String profileName);
+	
+	boolean validateLogIn(String profile, String password);
 }

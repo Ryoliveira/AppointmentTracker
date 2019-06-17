@@ -9,14 +9,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ch.task.user.UserProfile;
 
-public class UserJsonRepository implements UserRepository {
+public class AppointmentJsonRepository implements AppointmentRepository {
 
-	final private static String FILE_NAME = "./src/ch/task/file/appointmentLists.json";
+	final private static String FILE_NAME = "./appointmentLists.json";
 
 	private static ObjectMapper mapper = new ObjectMapper();
 
 	/*
-	 * sorts user appointments and writes them to JSON file
+	 * Writes users appointments to JSON file
 	 * 
 	 * @param profile User profile to be saved
 	 */
@@ -25,7 +25,6 @@ public class UserJsonRepository implements UserRepository {
 		File file = new File(FILE_NAME);
 		boolean foundProfile = false;
 		ArrayList<UserProfile> profiles = new ArrayList<>();
-		profile.removeExpired();
 		try {
 			if (file.exists()) {
 				profiles = mapper.readValue(file, new TypeReference<ArrayList<UserProfile>>() {
@@ -35,6 +34,7 @@ public class UserJsonRepository implements UserRepository {
 				if (user.getUserName().equals(profile.getUserName())) {
 					profiles.set(profiles.indexOf(user), profile);
 					foundProfile = true;
+					break;
 				}
 			}
 			if (!foundProfile) {
@@ -47,7 +47,8 @@ public class UserJsonRepository implements UserRepository {
 	}
 
 	/*
-	 * Return requested user profile if it exists
+	 * Return requested user profile if it exists and remove all appointments 
+	 * 30 days from due date.
 	 * 
 	 * @return profile if it exists, otherwise a new profile will be returned
 	 */
