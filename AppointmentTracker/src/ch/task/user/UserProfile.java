@@ -1,26 +1,20 @@
 package ch.task.user;
 
-import java.util.ArrayList;
 import java.util.Collections;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 
 public class UserProfile {
 
 	private String userName;
-	private ArrayList<Appointment> appointments;
+	private List<Appointment> appointments;
 
-	@JsonCreator
-	public UserProfile(@JsonProperty("userName") String user,
-			@JsonProperty("appointments") ArrayList<Appointment> apps) {
+	public UserProfile(String user, List<Appointment> apps) {
 		userName = user;
 		appointments = apps;
 	}
 
 	public UserProfile(String user) {
 		userName = user;
-		appointments = new ArrayList<>();
 	}
 
 	/*
@@ -40,14 +34,14 @@ public class UserProfile {
 	/*
 	 * @return list of appointments
 	 */
-	public ArrayList<Appointment> getAppointments() {
+	public List<Appointment> getAppointments() {
 		return appointments;
 	}
 
 	/*
 	 * @param appointment list
 	 */
-	public void setAppointments(ArrayList<Appointment> appointments) {
+	public void setAppointments(List<Appointment> appointments) {
 		this.appointments = appointments;
 	}
 

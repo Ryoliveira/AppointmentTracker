@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import org.jdom2.JDOMException;
 
 import ch.task.app.MainApp;
+import ch.task.file.LoginManager;
 import ch.task.file.UserRepository;
 import ch.task.file.UserXmlRepository;
 import javafx.event.ActionEvent;
@@ -21,7 +22,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 
-public class LogInController {
+public class LogInControl {
 	// Username/Password validation requirements
 	// Username must be between 8 and 16 characters
 	final String USERNAME_PAT = "^(?=.{8,20}$)[a-zA-Z0-9._]+$";
@@ -88,7 +89,7 @@ public class LogInController {
 	void AttemptLogIn(ActionEvent event) throws IOException {
 		String profile = userLogIn.getText();
 		String password = userPassword.getText();
-		boolean valid = userRepo.validateLogIn(profile, password);
+		boolean valid = LoginManager.validateLogIn(profile, password);
 		if (valid) {
 			launchHomePage(profile);
 			closeWindow(event);

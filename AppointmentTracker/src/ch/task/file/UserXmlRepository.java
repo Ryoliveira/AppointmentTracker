@@ -88,35 +88,6 @@ public class UserXmlRepository implements UserRepository{
 	}
 
 	/*
-	 * Validates profile name/password for match
-	 * 
-	 * @return if profile credentials match
-	 */
-	public boolean validateLogIn(String profile, String password) {
-		if (profile.isEmpty() || password.isEmpty()) {
-			return false;
-		}
-		try {
-			List<Element> users = getUsernames();
-			// Search for profile name
-			for (int i = 0; i < users.size(); i++) {
-				Element currentUser = users.get(i);
-				String profileName = currentUser.getAttributeValue("username");
-				if (profileName.equals(profile)) {
-					String profilePass = currentUser.getAttributeValue("password");
-					// Compare given password to hash
-					if (BCrypt.checkpw(password, profilePass)) {
-						return true;
-					}
-				}
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return false;
-	}
-
-	/*
 	 * Check to see if profile name already exists
 	 * 
 	 * @return if profile exists

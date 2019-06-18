@@ -1,10 +1,11 @@
 package ch.task.file;
 
-import ch.task.user.UserProfile;
+import java.util.List;
+
+import ch.task.user.Appointment;
 
 public interface AppointmentRepository {
-
-	void save(UserProfile profile);
-
-	UserProfile load(String profileName);
+	void save(Appointment app);
+	List<Appointment> load(String profileName);
+	void update(List<Appointment> apps);
 }

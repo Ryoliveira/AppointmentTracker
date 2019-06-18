@@ -7,7 +7,6 @@ import java.time.temporal.ChronoUnit;
 import ch.task.file.AppointmentJsonRepository;
 import ch.task.file.AppointmentRepository;
 import ch.task.user.Appointment;
-import ch.task.user.UserProfile;
 import ch.task.control.MainControl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -46,7 +45,6 @@ public class AppointmentControl {
 	 */
 	@FXML
 	void confirmAppointment(ActionEvent btn) {
-		UserProfile profile = JM.load(profileName);
 		DateTimeFormatter pattern = DateTimeFormatter.ISO_DATE;
 		try {
 			if (isValidDueDate()) {
@@ -57,9 +55,8 @@ public class AppointmentControl {
 				if (newTitle.isEmpty()) {
 					MainControl.alertBox(AlertType.ERROR, "Blank Title", null, "Please enter a valid title");
 				} else {
-					Appointment newApp = new Appointment(newStart, newDueDate, newTitle, newComment, false, false);
-					profile.addAppointment(newApp);
-					JM.save(profile);
+					Appointment newApp = new Appointment(newStart, newDueDate, newTitle, newComment, profileName, false, false);
+					JM.save(newApp);
 					MainControl.alertBox(AlertType.INFORMATION, "Success", null, "Appointment added succussfully");
 					closeWindow(btn);
 				}
@@ -79,7 +76,6 @@ public class AppointmentControl {
 	public boolean isValidDueDate() {
 		LocalDate now = LocalDate.now();
 		int daysBetween = (int) ChronoUnit.DAYS.between(now, dueDate.getValue());
-		System.out.println(daysBetween);
 		return daysBetween > 0 && daysBetween <= 60 && startDate.getValue().isBefore(dueDate.getValue());
 	}
 

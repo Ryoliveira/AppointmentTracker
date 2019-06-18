@@ -12,17 +12,20 @@ public class Appointment implements Comparable<Appointment> {
 	private String dueDate;
 	private String title;
 	private String comment;
+	private String creator;
 	private boolean completed;
 	private boolean due;
 
 	@JsonCreator
 	public Appointment(@JsonProperty("startDate") String start, @JsonProperty("dueDate") String dueD,
 			@JsonProperty("userTitle") String userTitle, @JsonProperty("comm") String comm,
-			@JsonProperty("compeleted") boolean complete, @JsonProperty("due") boolean isDue) {
+			@JsonProperty("creator") String userCreator, @JsonProperty("compeleted") boolean complete,
+			@JsonProperty("due") boolean isDue) {
 		startDate = start;
 		dueDate = dueD;
 		title = userTitle;
 		comment = comm;
+		creator = userCreator;
 		completed = complete;
 		due = checkIfDue();
 	}
@@ -82,6 +85,20 @@ public class Appointment implements Comparable<Appointment> {
 	public void setComment(String desc) {
 		this.comment = desc;
 	}
+	
+	/*
+	 * @return appointment creator
+	 */
+	public String getCreator() {
+		return creator;
+	}
+
+	/*
+	 * @param userCreator username who created appointment
+	 */
+	public void setCreator(String userCreator) {
+		creator = userCreator;
+	}
 
 	/*
 	 * @return if appointment is completed
@@ -119,7 +136,7 @@ public class Appointment implements Comparable<Appointment> {
 	public boolean checkIfDue() {
 		LocalDate today = LocalDate.now();
 		LocalDate dueDate = LocalDate.parse(this.dueDate);
-		boolean due = today.plusDays(1).isAfter(dueDate) ? true : false;
+		boolean due = today.plusDays(1).isAfter(dueDate);
 		if (due) {
 			this.due = true;
 		}

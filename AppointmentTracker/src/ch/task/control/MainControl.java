@@ -60,7 +60,6 @@ public class MainControl {
 	// User data manager variables
 	private UserProfile profile;
 	private AppointmentRepository JM = new AppointmentJsonRepository();
-	
 
 	void initialize() {
 	}
@@ -69,9 +68,9 @@ public class MainControl {
 	 * initialize profile and window data
 	 */
 	void initData(String profileN) {
-		profile = JM.load(profileN);
+		profile = new UserProfile(profileN, JM.load(profileN));
 		removeExpired();
-		profileName.setText(profile.getUserName());
+		profileName.setText(profileN);
 		setCurrentDate();
 		setChoiceBox();
 		listAppointments();
@@ -119,7 +118,6 @@ public class MainControl {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	/*
@@ -132,7 +130,7 @@ public class MainControl {
 		if (confirmAlert()) {
 			Appointment app = listBox.getSelectionModel().getSelectedItem();
 			profile.deleteAppointment(app);
-			JM.save(profile);
+			JM.update(profile.getAppointments());
 			listBox.getItems().remove(app);
 			listBox.refresh();
 			displayFirstItem();
@@ -152,21 +150,19 @@ public class MainControl {
 			String mark = contextItem.getText();
 			for (Appointment app : profile.getAppointments()) {
 				if (app.equals(modifyApp)) {
-					if(mark.equals("Mark Completed") && !app.isCompleted()) {
+					if (mark.equals("Mark Completed") && !app.isCompleted()) {
 						app.setCompleted(true);
-					}
-					else if(mark.equals("Mark Uncompleted")  && app.isCompleted()) {
+					} else if (mark.equals("Mark Uncompleted") && app.isCompleted()) {
 						app.setCompleted(false);
 					}
 				}
 			}
-			JM.save(profile);
+			JM.update(profile.getAppointments());
 			listBox.refresh();
 			displayDetails();
 		}
 	}
 
-	
 	/*
 	 * Displays details of appointment in detail space in GUI
 	 */
@@ -190,7 +186,7 @@ public class MainControl {
 	 * @param event event to trigger the method
 	 */
 	public void showAppointments(ActionEvent event) {
-		profile = JM.load(profile.getUserName());
+		profile.setAppointments(JM.load(profile.getUserName()));
 		String menuText = choiceBox.getValue();
 		if (menuText.equals("Any Date")) {
 			listAppointments();
@@ -202,13 +198,13 @@ public class MainControl {
 		displayFirstItem();
 
 	}
-	
+
 	/*
 	 * Removes all appointments that have been due for over 30 days
 	 */
 	public void removeExpired() {
 		Iterator<Appointment> iter = profile.getAppointments().iterator();
-		while(iter.hasNext()) {
+		while (iter.hasNext()) {
 			LocalDate due = LocalDate.parse(iter.next().getDueDate());
 			LocalDate today = LocalDate.now();
 			int daysBetween = (int) ChronoUnit.DAYS.between(due, today);
@@ -217,9 +213,8 @@ public class MainControl {
 			}
 		}
 		listBox.refresh();
-		JM.save(profile);
+		JM.update(profile.getAppointments());
 	}
-
 
 	/*
 	 * Selects first item in listView and displays details in the GUI detail box
@@ -306,7 +301,7 @@ public class MainControl {
 	/*
 	 * displays confirm alert to user
 	 * 
-	 * @return true if 'OK' button was clicked, false otherwise
+	 * @return if 'OK' button was clicked
 	 */
 	public static boolean confirmAlert() {
 		Alert confirm = new Alert(AlertType.CONFIRMATION, "Are you sure?");
