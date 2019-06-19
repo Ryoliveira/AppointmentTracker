@@ -1,5 +1,6 @@
 package ch.task.user;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -10,11 +11,11 @@ public class UserProfile {
 
 	public UserProfile(String user, List<Appointment> apps) {
 		userName = user;
-		appointments = apps;
+		appointments = apps != null ? apps : new ArrayList<Appointment>();
 	}
 
 	public UserProfile(String user) {
-		userName = user;
+		this(user, new ArrayList<Appointment>());
 	}
 
 	/*
@@ -35,7 +36,7 @@ public class UserProfile {
 	 * @return list of appointments
 	 */
 	public List<Appointment> getAppointments() {
-		return appointments;
+		return Collections.unmodifiableList(appointments);
 	}
 
 	/*

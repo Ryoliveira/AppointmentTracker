@@ -109,11 +109,11 @@ public class MainControl {
 			Scene scene = new Scene(loader.load());
 			window.setTitle("Add Appointment");
 			window.setScene(scene);
-			window.show();
-			window.setResizable(false);
-			window.sizeToScene();
 			AppointmentControl control = loader.<AppointmentControl>getController();
 			control.initData(profile.getUserName());
+			window.setResizable(false);
+			window.sizeToScene();
+			window.showAndWait();
 			listAppointments();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -186,7 +186,6 @@ public class MainControl {
 	 * @param event event to trigger the method
 	 */
 	public void showAppointments(ActionEvent event) {
-		profile.setAppointments(JM.load(profile.getUserName()));
 		String menuText = choiceBox.getValue();
 		if (menuText.equals("Any Date")) {
 			listAppointments();
@@ -202,7 +201,7 @@ public class MainControl {
 	/*
 	 * Removes all appointments that have been due for over 30 days
 	 */
-	public void removeExpired() {
+	private void removeExpired() {
 		Iterator<Appointment> iter = profile.getAppointments().iterator();
 		while (iter.hasNext()) {
 			LocalDate due = LocalDate.parse(iter.next().getDueDate());
@@ -219,7 +218,7 @@ public class MainControl {
 	/*
 	 * Selects first item in listView and displays details in the GUI detail box
 	 */
-	public void displayFirstItem() {
+	private void displayFirstItem() {
 		if (listBox.getItems().size() != 0) {
 			listBox.getSelectionModel().selectFirst();
 			displayDetails();
@@ -240,7 +239,8 @@ public class MainControl {
 	 * @param dateCase determines whether to display current date or other specified
 	 * date
 	 */
-	public void showSelectedDate(String dateCase) {
+	private void showSelectedDate(String dateCase) {
+		profile.setAppointments(JM.load(profile.getUserName()));
 		String date = "";
 		if (dateCase.equals("Due Today")) {
 			date = LocalDate.now().format(DateTimeFormatter.ISO_DATE);
@@ -262,7 +262,8 @@ public class MainControl {
 	/*
 	 * populates listView with all user appointments
 	 */
-	public void listAppointments() {
+	private void listAppointments() {
+		profile.setAppointments(JM.load(profile.getUserName()));
 		listBox.getItems().clear();
 		for (Appointment apps : profile.getAppointments()) {
 			listBox.getItems().add(apps);
@@ -303,7 +304,7 @@ public class MainControl {
 	 * 
 	 * @return if 'OK' button was clicked
 	 */
-	public static boolean confirmAlert() {
+	private static boolean confirmAlert() {
 		Alert confirm = new Alert(AlertType.CONFIRMATION, "Are you sure?");
 		confirm.setHeaderText("");
 		confirm.setTitle("Confirm");

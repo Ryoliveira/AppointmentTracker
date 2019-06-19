@@ -134,7 +134,7 @@ public class LogInControl {
 	 * 
 	 * @return if text is valid
 	 */
-	public boolean validate(String text, String pattern) {
+	private boolean validate(String text, String pattern) {
 		Pattern pat = Pattern.compile(pattern);
 		Matcher match = pat.matcher(text);
 		if (match.matches()) {
@@ -147,7 +147,7 @@ public class LogInControl {
 	/*
 	 * launch home page for application
 	 */
-	public void launchHomePage(String profile) throws IOException {
+	private void launchHomePage(String profile) throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/Main.fxml"));
 		AnchorPane layout = loader.load();
 		Scene scene = new Scene(layout);

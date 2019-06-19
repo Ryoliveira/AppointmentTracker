@@ -52,7 +52,10 @@ public class AppointmentControl {
 				String newDueDate = dueDate.getValue().format(pattern);
 				String newTitle = title.getText();
 				String newComment = comment.getText();
-				if (newTitle.isEmpty()) {
+				if(newTitle.length() > 25) {
+					MainControl.alertBox(AlertType.ERROR, "Title length error", null, "Title must be less than 25 characters.");
+				}
+				else if (newTitle.isEmpty()) {
 					MainControl.alertBox(AlertType.ERROR, "Blank Title", null, "Please enter a valid title");
 				} else {
 					Appointment newApp = new Appointment(newStart, newDueDate, newTitle, newComment, profileName, false, false);
@@ -73,7 +76,7 @@ public class AppointmentControl {
 	 * 
 	 * @return if due date is within 30 days
 	 */
-	public boolean isValidDueDate() {
+	private boolean isValidDueDate() {
 		LocalDate now = LocalDate.now();
 		int daysBetween = (int) ChronoUnit.DAYS.between(now, dueDate.getValue());
 		return daysBetween > 0 && daysBetween <= 60 && startDate.getValue().isBefore(dueDate.getValue());
