@@ -1,8 +1,12 @@
 package ch.task.user;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 public class UserProfile {
 
@@ -33,10 +37,14 @@ public class UserProfile {
 	}
 
 	/*
-	 * @return list of appointments
+	 * @return cloned list of appointments
 	 */
 	public List<Appointment> getAppointments() {
-		return Collections.unmodifiableList(appointments);
+		List<Appointment> clonedList = new ArrayList<>();
+		for(Appointment app : appointments) {
+			clonedList.add(app.clone());
+		}
+		return clonedList;
 	}
 
 	/*
@@ -61,8 +69,46 @@ public class UserProfile {
 	 * 
 	 * @param app appointment object to be removed
 	 */
-	public void deleteAppointment(Appointment app) {
-		appointments.remove(app);
+	public void deleteAppointment(UUID id) {
+		Iterator<Appointment> iter = appointments.iterator();
+		while(iter.hasNext()) {
+			if(iter.next().getId() == id) {
+				iter.remove();
+				break;
+			}
+		}
+	}
+	
+	/*
+	 * mark appointment completed/uncompleted
+	 * 
+	 * @param appID Appointment unique id
+	 * 
+	 * @param mark boolean for completed
+	 */
+	public void markAppointment(UUID appID, boolean mark) {
+		for(Appointment app: appointments) {
+			if(app.getId() == appID) {
+				app.setCompleted(mark);
+			}
+		}
+	}
+	
+	/*
+	 * removes all appointments that have been due for more than 30 days
+	 * 
+	 */
+	public void removeExpired() {
+		Iterator<Appointment> iter = appointments.iterator();
+		while(iter.hasNext()) {
+			LocalDate due = LocalDate.parse(iter.next().getDueDate());
+			LocalDate today = LocalDate.now();
+			int daysBetween = (int) ChronoUnit.DAYS.between(due, today);
+			if (daysBetween > 30) {
+				iter.remove();
+				break;
+			}
+		}
 	}
 
 	/*
@@ -71,4 +117,5 @@ public class UserProfile {
 	public void sortAppointments() {
 		Collections.sort(appointments);
 	}
+
 }

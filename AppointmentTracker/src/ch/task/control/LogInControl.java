@@ -122,6 +122,7 @@ public class LogInControl {
 			loader.setLocation(MainApp.class.getResource("../view/Registration.fxml"));
 			Scene scene = new Scene(loader.load());
 			window.setScene(scene);
+			window.setResizable(false);
 			window.show();
 		} catch (IOException e) {
 			e.printStackTrace();

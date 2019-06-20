@@ -58,7 +58,7 @@ public class AppointmentControl {
 				else if (newTitle.isEmpty()) {
 					MainControl.alertBox(AlertType.ERROR, "Blank Title", null, "Please enter a valid title");
 				} else {
-					Appointment newApp = new Appointment(newStart, newDueDate, newTitle, newComment, profileName, false, false);
+					Appointment newApp = new Appointment(newStart, newDueDate, newTitle, newComment, profileName);
 					JM.save(newApp);
 					MainControl.alertBox(AlertType.INFORMATION, "Success", null, "Appointment added succussfully");
 					closeWindow(btn);

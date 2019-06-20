@@ -3,8 +3,6 @@ package ch.task.control;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.Iterator;
 import java.util.Optional;
 
 import ch.task.app.MainApp;
@@ -69,7 +67,8 @@ public class MainControl {
 	 */
 	void initData(String profileN) {
 		profile = new UserProfile(profileN, JM.load(profileN));
-		removeExpired();
+		profile.removeExpired();
+		JM.update(profile.getAppointments());
 		profileName.setText(profileN);
 		setCurrentDate();
 		setChoiceBox();
@@ -129,10 +128,9 @@ public class MainControl {
 	void removeAppointment(ActionEvent event) {
 		if (confirmAlert()) {
 			Appointment app = listBox.getSelectionModel().getSelectedItem();
-			profile.deleteAppointment(app);
+			profile.deleteAppointment(app.getId());
 			JM.update(profile.getAppointments());
 			listBox.getItems().remove(app);
-			listBox.refresh();
 			displayFirstItem();
 		}
 	}
@@ -145,22 +143,21 @@ public class MainControl {
 	@FXML
 	void markProgress(ActionEvent event) {
 		Appointment modifyApp = listBox.getSelectionModel().getSelectedItem();
+		int appIndex = listBox.getSelectionModel().getSelectedIndex();
 		if (confirmAlert()) {
 			MenuItem contextItem = (MenuItem) event.getSource();
 			String mark = contextItem.getText();
-			for (Appointment app : profile.getAppointments()) {
-				if (app.equals(modifyApp)) {
-					if (mark.equals("Mark Completed") && !app.isCompleted()) {
-						app.setCompleted(true);
-					} else if (mark.equals("Mark Uncompleted") && app.isCompleted()) {
-						app.setCompleted(false);
-					}
-				}
+			if (mark.equals("Mark Completed") && !modifyApp.isCompleted()) {
+				profile.markAppointment(modifyApp.getId(), true);
+			} else if (mark.equals("Mark Uncompleted") && modifyApp.isCompleted()) {
+				profile.markAppointment(modifyApp.getId(), false);
 			}
-			JM.update(profile.getAppointments());
-			listBox.refresh();
-			displayDetails();
 		}
+		JM.update(profile.getAppointments());
+		showAppointments();
+		listBox.getSelectionModel().select(appIndex);
+		displayDetails();
+
 	}
 
 	/*
@@ -179,13 +176,22 @@ public class MainControl {
 		}
 
 	}
-
+	
 	/*
 	 * populate listView with user saved appointments
 	 * 
 	 * @param event event to trigger the method
 	 */
 	public void showAppointments(ActionEvent event) {
+		showAppointments();
+	}
+
+	/*
+	 * populate listView with user saved appointments 
+	 *
+	 */
+	public void showAppointments() {
+		profile.setAppointments(JM.load(profile.getUserName()));
 		String menuText = choiceBox.getValue();
 		if (menuText.equals("Any Date")) {
 			listAppointments();
@@ -194,25 +200,7 @@ public class MainControl {
 		} else if (menuText.equals("Due Today")) {
 			showSelectedDate(menuText);
 		}
-		displayFirstItem();
 
-	}
-
-	/*
-	 * Removes all appointments that have been due for over 30 days
-	 */
-	private void removeExpired() {
-		Iterator<Appointment> iter = profile.getAppointments().iterator();
-		while (iter.hasNext()) {
-			LocalDate due = LocalDate.parse(iter.next().getDueDate());
-			LocalDate today = LocalDate.now();
-			int daysBetween = (int) ChronoUnit.DAYS.between(due, today);
-			if (daysBetween > 30) {
-				iter.remove();
-			}
-		}
-		listBox.refresh();
-		JM.update(profile.getAppointments());
 	}
 
 	/*
@@ -240,7 +228,6 @@ public class MainControl {
 	 * date
 	 */
 	private void showSelectedDate(String dateCase) {
-		profile.setAppointments(JM.load(profile.getUserName()));
 		String date = "";
 		if (dateCase.equals("Due Today")) {
 			date = LocalDate.now().format(DateTimeFormatter.ISO_DATE);
@@ -263,7 +250,6 @@ public class MainControl {
 	 * populates listView with all user appointments
 	 */
 	private void listAppointments() {
-		profile.setAppointments(JM.load(profile.getUserName()));
 		listBox.getItems().clear();
 		for (Appointment apps : profile.getAppointments()) {
 			listBox.getItems().add(apps);

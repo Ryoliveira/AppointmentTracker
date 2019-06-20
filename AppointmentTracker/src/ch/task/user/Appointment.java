@@ -2,12 +2,14 @@ package ch.task.user;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Appointment implements Comparable<Appointment> {
+public class Appointment implements Comparable<Appointment>, Cloneable {
 
+	private UUID id;
 	private String startDate;
 	private String dueDate;
 	private String title;
@@ -17,17 +19,36 @@ public class Appointment implements Comparable<Appointment> {
 	private boolean due;
 
 	@JsonCreator
-	public Appointment(@JsonProperty("startDate") String start, @JsonProperty("dueDate") String dueD,
-			@JsonProperty("userTitle") String userTitle, @JsonProperty("comm") String comm,
-			@JsonProperty("creator") String userCreator, @JsonProperty("compeleted") boolean complete,
-			@JsonProperty("due") boolean isDue) {
-		startDate = start;
-		dueDate = dueD;
-		title = userTitle;
-		comment = comm;
-		creator = userCreator;
-		completed = complete;
-		due = checkIfDue();
+	public Appointment(@JsonProperty("appID") UUID appID, @JsonProperty("startDate") String startDate,
+			@JsonProperty("dueDate") String dueDate, @JsonProperty("userTitle") String title,
+			@JsonProperty("comm") String comment, @JsonProperty("creator") String creator,
+			@JsonProperty("compeleted") boolean completed, @JsonProperty("due") boolean isDue) {
+		setId(appID != null ? appID : UUID.randomUUID());
+		setStartDate(startDate);
+		setDueDate(dueDate);
+		setTitle(title);
+		setComment(comment);
+		setCreator(creator);
+		setCompleted(completed);
+		checkIfDue();
+	}
+	
+	public Appointment(String startDate, String dueDate, String title, String comment, String creator) {
+		this(null, startDate, dueDate, title, comment, creator, false, false);
+	}
+
+	/*
+	 * @return appointment ID
+	 */
+	public UUID getId() {
+		return id;
+	}
+
+	/*
+	 * @param id appointment id
+	 */
+	public void setId(UUID id) {
+		this.id = id;
 	}
 
 	/*
@@ -85,7 +106,7 @@ public class Appointment implements Comparable<Appointment> {
 	public void setComment(String desc) {
 		this.comment = desc;
 	}
-	
+
 	/*
 	 * @return appointment creator
 	 */
@@ -153,9 +174,18 @@ public class Appointment implements Comparable<Appointment> {
 		String formattedDate = LocalDate.parse(date).format(f);
 		return formattedDate;
 	}
+	
+	
+	/*
+	 * @return clone of this object
+	 */
+	@Override
+	protected Appointment clone() {
+		return new Appointment(id, startDate, dueDate, title, comment, creator, completed, due);
+	}
 
 	/*
-	 * returned formatted start/due date and title of appointment
+	 * return formatted start/due date and title of appointment
 	 * 
 	 * @return formatted string
 	 */
