@@ -90,6 +90,7 @@ public class UserProfile {
 		for(Appointment app: appointments) {
 			if(app.getId() == appID) {
 				app.setCompleted(mark);
+				break;
 			}
 		}
 	}

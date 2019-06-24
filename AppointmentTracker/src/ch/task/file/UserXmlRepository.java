@@ -87,30 +87,4 @@ public class UserXmlRepository implements UserRepository{
 		return users;
 	}
 
-	/*
-	 * Check to see if profile name already exists
-	 * 
-	 * @return if profile exists
-	 */
-	public boolean checkForProfile(String profileName) {
-		File xmlFile = new File(FILE_NAME);
-		if (xmlFile.exists()) {
-
-			try {
-				List<Element> users = getUsernames();
-				// Search for profile name
-				for (int i = 0; i < users.size(); i++) {
-					Element currentUser = users.get(i);
-					String username = currentUser.getAttributeValue("username");
-					if (username.equals(profileName)) {
-						return true;
-					}
-				}
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-		return false;
-	}
-
 }

@@ -113,7 +113,7 @@ public class MainControl {
 			window.setResizable(false);
 			window.sizeToScene();
 			window.showAndWait();
-			listAppointments();
+			showAppointments();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

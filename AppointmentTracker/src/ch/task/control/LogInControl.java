@@ -4,13 +4,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.jdom2.JDOMException;
 
 import ch.task.app.MainApp;
 import ch.task.file.LoginManager;
+import ch.task.file.RegistrationManager;
 import ch.task.file.UserRepository;
 import ch.task.file.UserXmlRepository;
 import javafx.event.ActionEvent;
@@ -43,6 +41,7 @@ public class LogInControl {
 	private PasswordField matchPassword;
 
 	private UserRepository userRepo = new UserXmlRepository();
+	private RegistrationManager RM = new RegistrationManager();
 
 	/*
 	 * Validates and creates new profile for user
@@ -53,9 +52,9 @@ public class LogInControl {
 		String password = newPassword.getText();
 		String checkMatchPass = matchPassword.getText();
 		// Check for a none blank unique username
-		boolean isValidUserName = validate(username, USERNAME_PAT);
-		boolean validPass = validate(password, PASSWORD_PAT);
-		boolean isUniqueName = !userRepo.checkForProfile(username);
+		boolean isValidUserName = RM.validate(username, USERNAME_PAT);
+		boolean validPass = RM.validate(password, PASSWORD_PAT);
+		boolean isUniqueName = !RM.checkForProfile(username);
 		boolean notBlank = !password.isEmpty();
 		// check if password was entered correctly in both fields
 		boolean isMatch = password.equals(checkMatchPass);
@@ -129,22 +128,7 @@ public class LogInControl {
 		}
 
 	}
-
-	/*
-	 * validates text to match pattern
-	 * 
-	 * @return if text is valid
-	 */
-	private boolean validate(String text, String pattern) {
-		Pattern pat = Pattern.compile(pattern);
-		Matcher match = pat.matcher(text);
-		if (match.matches()) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
+	
 	/*
 	 * launch home page for application
 	 */
